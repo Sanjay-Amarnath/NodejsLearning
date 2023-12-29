@@ -1,0 +1,18 @@
+const http = require("http");
+const logger = require("./logger");
+
+const server = http.createServer((req, res) => {
+  if (req.url === "/") {
+    res.write("Hello World");
+    res.end();
+  }
+
+  if (req.url === "/home") {
+    res.write(JSON.stringify([1, 2, 3, 4]));
+    res.end();
+  }
+});
+
+server.listen(3000);
+
+console.log("Sever listening...");
