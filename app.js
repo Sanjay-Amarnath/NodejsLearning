@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 
 const app = express();
 
@@ -17,6 +18,16 @@ app.get("/", (req, res) => {
 app.post("/api/course", (req, res) => {
   const dublicateValue = courses.find((i) => i.name === req.body.name);
 
+  const schema = {
+    name: Joi.string().min(3).required,
+  };
+
+  const result = Joi.valid(req.body, schema);
+
+  if (result.error) {
+    res.send(400).send(result.error);
+  }
+
   if (!dublicateValue) {
     const course = {
       id: courses.length + 1,
@@ -26,15 +37,15 @@ app.post("/api/course", (req, res) => {
     courses.push(course);
     res.send(course);
   } else {
-    res.send("The Name is Already Taken,try different Name");
+    res.status(404).send("The Name is Already Taken,try different Name");
   }
 });
 
 // Delete Data
 app.delete("/api/course/:id", (req, res) => {
   const deleteData = courses.filter((i) => i.id !== parseInt(req.params.id));
-
-  console.log(deleteData, "params.id");
+  courses = deleteData;
+  res.send(courses);
 });
 
 app.get("/api/course", (req, res) => {
@@ -56,7 +67,7 @@ app.get("/api/:date/:year", (req, res) => {
   res.send(req.query);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 console.log(port);
 app.listen(3000, () => {
   console.log(`Port is listening:${port}`);
