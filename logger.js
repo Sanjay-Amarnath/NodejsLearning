@@ -1,10 +1,12 @@
-var url = "http://mylogger.io//log";
+const log = (req, res, next) => {
+  console.log("logging...");
+  next();
+};
 
+const auth = (req, res, next) => {
+  console.log("Authentication...");
+  next();
+};
 
-function log(message){
-    console.log(message)
-}
-
-module.exports.log = log;
-module.exports.endpoint = url;
-module.exports.testing ="testing"
+module.exports = log;
+// module.exports = auth;
